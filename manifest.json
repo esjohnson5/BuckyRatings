@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Getting started example",
+  "description": "This extension shows a Google Image search result for the current page",
+  "version": "1.0",
+  "permissions": ["tabs","<all_urls>"],
+  
+  "browser_action": {
+  	"default_icon": "icon.png",
+  	"default_popup": "popup.html"
+
+  },
+
+  "content_scripts": [
+	  {
+	  	"matches": ["*://*.my.wisc.edu/portal/f/u360303l1s4/p/*"],
+	  	"js": ["popup.js", "crawler.js"],
+	  	"run_at": "document_end"
+	  }
+	]
+}
