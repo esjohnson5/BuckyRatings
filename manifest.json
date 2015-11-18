@@ -14,7 +14,7 @@
   "content_scripts": [
 	  {
 	  	"matches": ["*://my.wisc.edu/portal/f/u360303l1s4/p/CourseGuide-Browse-Courses.u360303l1n15/detached/render.uP?pCm=view&pP_courseID=*"],
-	  	"js": ["popup.js", "crawler.js"],
+	  	"js": ["jquery-1.11.3.min.js", "hovercard.js", "popup.js", "crawler.js"],
 	  	"run_at": "document_end"
 	  }
 	]

@@ -26,9 +26,12 @@ function crawl(){
 		var text = document.createTextNode("RMP");
 		btn.type = "button";
 		btn.className = "ratingBtn";
+		btn.searchURL = 'http://www.ratemyprofessors.com/search.jsp?queryBy=teacherName&schoolName=university+of+wisconsin+madison&queryoption=HEADER&query=' + professor[j] + '&facetSearch=true';
 		btn.appendChild(text);
 		btn.id = professor[j];
 		cell[7].appendChild(btn);
+		//btn.addEventListener('mouseover', openRatings);
+
 	}
 //alert("finished crawl");
 }
@@ -41,6 +44,19 @@ function reorder(index){
 	var name = first + " " + last;
 	professor[index] = name;
 }
+//hovercard implementation
+
+$(document).ready(function(){
+	 $('.ratingBtn').each(function() {     
+		var hoverHTMLDemoBasic = 'look at all this DATA';     
+		var id = $(this).attr('id');     
+		$('.ratingBtn').hovercard({         
+			detailsHTML: hoverHTMLDemoBasic,         
+			width: 400     
+		}); 
+	});
+});
+
 
 crawl();
 
