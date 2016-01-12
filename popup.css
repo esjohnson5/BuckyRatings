@@ -1,0 +1,32 @@
+.ratingBtn {
+    background-color:#DCE8FF;
+    -moz-border-radius:28px;
+    -webkit-border-radius:28px;
+    border-radius:28px;
+    border: none;
+    cursor:pointer;
+    color:#336699;
+    font-family:Verdana;
+    font-size:8.5px;
+    font-weight: 600; 
+    padding:1px 6px;
+    text-decoration:none;
+    width: 85px;
+    display:block-inline;
+    margin: 1px 0px 4px 0px;
+}
+
+.popup_box {
+    position: absolute;
+    top: -141px;
+    left: 253px;
+    margin: 100px auto;
+    width: 210px;
+    height: 110px;
+    background-color: #FFFFFF;
+    border: 2px solid #D6D6D6;
+    z-index: 100000000000000000;
+}
+
+
+

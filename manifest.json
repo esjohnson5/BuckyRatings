@@ -3,19 +3,27 @@
   "name": "Getting started example",
   "description": "This extension shows a Google Image search result for the current page",
   "version": "1.0",
-  "permissions": ["tabs","<all_urls>"],
-  
-  "browser_action": {
-  	"default_icon": "icon.png",
-  	"default_popup": "popup.html"
 
-  },
+  "page_action": {
+      "default_icon": "icon.png"
+    }, 
+
+  "permissions": [
+    "http://www.ratemyprofessors.com/*",
+    "tabs"
+  ],
+
+  "background": {
+      "scripts": ["gatherdata.js"],
+      "persistent": false
+    },
 
   "content_scripts": [
 	  {
 	  	"matches": ["*://my.wisc.edu/portal/f/u360303l1s4/p/CourseGuide-Browse-Courses.u360303l1n15/detached/render.uP?pCm=view&pP_courseID=*"],
-	  	"js": ["jquery-1.11.3.min.js", "hovercard.js", "popup.js", "crawler.js"],
+	  	"js": ["crawler.js"],
+      "css": ["popup.css"],
 	  	"run_at": "document_end"
 	  }
 	]
-}
+} 

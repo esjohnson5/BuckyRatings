@@ -2,7 +2,7 @@
 var professor = [];
 var prof_count = 0;
 
-function crawl(){
+function main(){
 	var table = document.querySelector('.sectionDetailList');
 	var tbody = table.querySelector('tbody');
 	var row = tbody.rows;
@@ -14,26 +14,28 @@ function crawl(){
 		var cell = row[i].cells;
 		if(cell[1].innerText.indexOf('LEC') != -1){
 			professor[prof_count] = cell[5].innerText; //creates list of professors
-			reorder(prof_count); //re-ordering proessor name
+			var name = reorder(prof_count); //re-ordering proessor name
 			prof_row[prof_count] = i; //storing the row index of the professor names for later use
+			var newcell = row[i].insertCell(8);
+			buildBtn(newcell,name);
 			prof_count++;
 		}
 	}
+}
+function buildBtn(cell,name){
 	//building button to click
-	for(var j = 0; j < prof_count; j++){
-		var cell = row[prof_row[j]].cells;
 		var btn = document.createElement('a');
-		var text = document.createTextNode("RMP");
+		var text = document.createTextNode("Show Rating");
+		var searchName = name.replace(' ','+');
+		//console.log(searchName);
 		btn.type = "button";
 		btn.className = "ratingBtn";
-		btn.searchURL = 'http://www.ratemyprofessors.com/search.jsp?queryBy=teacherName&schoolName=university+of+wisconsin+madison&queryoption=HEADER&query=' + professor[j] + '&facetSearch=true';
-		btn.appendChild(text);
-		btn.id = professor[j];
-		cell[7].appendChild(btn);
-		//btn.addEventListener('mouseover', openRatings);
-
-	}
-//alert("finished crawl");
+		btn.searchURL = 'http://www.ratemyprofessors.com/search.jsp?queryBy=teacherName&schoolName=university+of+wisconsin+madison&queryoption=HEADER&query=' + searchName + '&facetSearch=true';
+		btn.appendChild(text);	
+		btn.id = name;
+		//console.log(professor[j]);
+		cell.appendChild(btn);
+		btn.addEventListener('click', openRatings);
 }
 //flips first and last names
 function reorder(index){
@@ -41,23 +43,48 @@ function reorder(index){
 	var first = split_name[1];
 	first = first.replace(/\s+/g, '');
 	var last = split_name[0];
-	var name = first + " " + last;
+	var name = first.toLowerCase() + " " + last.toLowerCase();
 	professor[index] = name;
+	return name;
 }
-//hovercard implementation
 
-$(document).ready(function(){
-	 $('.ratingBtn').each(function() {     
-		var hoverHTMLDemoBasic = 'look at all this DATA';     
-		var id = $(this).attr('id');     
-		$('.ratingBtn').hovercard({         
-			detailsHTML: hoverHTMLDemoBasic,         
-			width: 400     
-		}); 
-	});
-});
+function openRatings(){
+	 if (this.clicked == true) { //happens when button was clicked while active
+        this.innerHTML = '';
+        //this.innerHTML = '<input class="ratingBtn" type="button" value="Show Rating" />';
+        this.clicked = false;
+    } else { //happens when button was clicked while inactive
+        this.clicked = true;
+        this.innerHTML = '<input class="ratingBtn" type="button" value="Hide Rating />';
+        var firstName = this.id;
+        var popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerText = 'Loading...';
+        popup.position = 'block';
+
+        this.appendChild(popup);
+
+        chrome.runtime.sendMessage({
+            url: this.searchURL
+        }, function(responseText) {
+            //responseText = responseText.replace('http://blog.ratemyprofessors.com/wp-content/uploads/2015/01/WNOs6.5_RMP_72x72.jpg', '');
+            //responseText = responseText.replace('/assets/chilis/warm-chili.png', '');
+            //responseText = responseText.replace('/assets/chilis/cold-chili.png', '');
+            getProfInfo(popup, firstName, responseText);
+        });
+    }
+}
+function getProfInfo(popup,name,response){
+
+	var data = document.createElement('div');
+	data.innerHTML = response;
+	var proflist = data.getElementsByClassName('listing PROFESSOR');
+	console.log(proflist.length);
 
 
-crawl();
 
+
+}
+
+main();
 //http://www.ratemyprofessors.com/search.jsp?queryBy=teacherName&schoolName=university+of+wisconsin+madison&queryoption=HEADER&query=
